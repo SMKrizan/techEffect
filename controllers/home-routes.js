@@ -3,17 +3,38 @@ const sequelize = require('../config/connection');
 const { Post, User, Comment } = require('../models');
 
 router.get('/', (req, res) => {
-    res.render('homepage', {
-        id: 1,
-        post_url: "https://handlebarsjs.com/guide/",
-        title: "Handlebars Docs",
-        created_at: new Date(),
-        vote_count: 10,
-        comments: [{}, {}],
-        user: {
-            username: "test_user"
-        }
+    // request for template engine to render response
+    Post.findAll({
+        attributes: [
+            'id',
+            'title',
+            'created_at',
+            [sequelize.literal('(SELECT COUNT(*) FROM comments WHERE post.id = comment.post_id)'), 'comment_count']
+        ],
+        include: [
+            {
+                model: User,
+                attributes: [
+                
+                ]
+            },
+            {
+                model: Comment,
+                attributes: [
+
+                ]
+            }
+        ]
+    })
+    .then(dbPostData => {
+        // loops through each Sequelize object and passes to template engine to create a new array of tailored response objects
+        const posts = dbPostData.map(post => post.get({ plain: true }));
+        res.render('homepage', { posts });
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json(err);
     });
 });
 
-modeule.exports = router;
+module.exports = router;

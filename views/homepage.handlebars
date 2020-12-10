@@ -1,0 +1,19 @@
+<ol class='post-list'>
+    {{!-- works with home-routes' getAll() to serialize response for each data object --}}
+    {{#each posts as |post|}}
+    <li>
+        <article class='post'>
+            <div class='title'>
+                <a href='{{ post.post_url }}' target='_blank'>{{ post.title }}</a>
+                <span>({{ post.post_url }})</span>
+            </div>
+            <div class='meta'>
+                {{ post.comment_count }} comment(s) by {{ post.user.username }} on
+                {{ post.created_at }}
+                |
+                <a href='/post/{{ post.id }}'>{{ post.comments.length }} comment(s)</a>
+            </div>
+        </article>
+    </li>
+    {{/each}}
+</ol>
