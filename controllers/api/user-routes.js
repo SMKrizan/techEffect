@@ -6,7 +6,7 @@ const { User, Post, Vote, Comment } = require('../../models');
 router.get('/', (req, res) => {
     // access 'User' model and run 'findAll()', a 'Model' method equivalent to SQL's "SELECT * FROM users"; when the client makes GET request to this specific endpoint, all users will be selected from the user table in the db and sent back as JSON
     User.findAll({
-        // more attributes can be added to the array for exclusion
+        // additional attributes can be added to exclusion array
         attributes: { exclude: ['password'] } 
     })
         // since Sequelize is a JS Promise-based library, the '.then()' method is used with all model methods
@@ -126,7 +126,7 @@ router.post('/login', (req, res) => {
     });
 });
 
-// since 'logout' will not have an associated page it should be a button, but can be styled like a link
+// since '/api/users/logout' will not have an associated page it should be a button, but can be styled like a link
 router.post('/logout', (req, res) => {
     if (req.session.loggedIn) {
         req.session.destroy(() => {
