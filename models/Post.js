@@ -21,8 +21,12 @@ Post.init(
         },
         content: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            validate: {
+                len: [1]
+            }
         },
+        // foreignKey identifies who created post
         user_id: {
             type:DataTypes.INTEGER,
             references: {

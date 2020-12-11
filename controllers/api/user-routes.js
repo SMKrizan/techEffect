@@ -88,25 +88,20 @@ router.post('/', (req, res) => {
 
 // POST (/api/users/login) routes carry the request parameter within the req.body (as opposed to the carrying the parameter appended in the URL string as is the case with GET) which makes POST a more secure way to transfer data from client to server
 router.post('/login', (req, res) => {
-    // query user table using 'fineOne' method for email as entered by user and assign it to 'req.body.email'
+    // query user table using 'findOne' method for email as entered by user and assign it to 'req.body.email'
     User.findOne({
         // looks for user with specified email
         where: {
             email: req.body.email
         }
-        // result of query is passed as 'dbUserData'    
+    // result of query passed as 'dbUserData'    
     }).then(dbUserData => {
-        console.log('dbUserData: ', dbUserData);
-        console.log('dbUserData.id: ', dbUserData.id);
-        console.log('dbUserData.dataValues.id: ', dbUserData.dataValues.id);
         if (!dbUserData) {
             res.status(400).json({ message: 'No user with that email address was found.' });
             return;
         }
         // if query is successful 'checkPassword' is called on the 'dbUserData' object using the plaintext password, called as req.body.password; the 'compareSync' method is inside of 'checkPassword' and will confirm or deny whether supplied password matches hashed password, returning a boolean to to the variable 'validPassword'
-        console.log('req.body.pwd: ', req.body.password);
         const validPassword = dbUserData.checkPassword(req.body.password);
-        console.log('validPassWord: ', validPassword);
 
         if (!validPassword) {
             res.status(400).json({ message: 'Incorrect password!' });
@@ -139,8 +134,9 @@ router.post('/logout', (req, res) => {
 
 // PUT /api/users/1
 router.put('/:id', (req, res) => {
-    // combines methods for both creating and looking up data; 'req.body' contains the new data
+    // combines methods for both creating and looking up data; 'req.body' contains new data
     User.update(req.body, {
+        // required by the Sequelize 'beforeUpdate()' method in order to hash password prior to submitting request
         individualHooks: true,
         where: {
             // 'req.params.id' indicates where new data should be applied; (equivalient to SQL's "UPDATE users SET username = 'dorothy', email = 'dorothy@woz.net', password = 'toto' WHERE id = 1")

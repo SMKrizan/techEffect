@@ -5,9 +5,12 @@ const bcrypt = require('bcrypt');
 
 // User extends all functionality of Model class
 class User extends Model {
+    // the Sequelize 'checkPassword()' method takes plaintext from client request at 'req.body.email' and compares it with hashed password using bcrypt's 'compareSync()' method
     checkPassword(loginPw) {
+        // accesses saved user properties with keyword 'this'
         return bcrypt.compareSync(loginPw, this.password);
     }
+    
 }
 
 // provides context for how the methods inherited from Model class should work, and initializes User model's data and configuration by passing in two objects as arguments
@@ -25,6 +28,7 @@ User.init(
             type: DataTypes.STRING,
             allowNull: false,
         },
+        // opting to include 'email' as a user parameter because it is a unique identifier and will allow for individuals to use the same username.
         email: {
             type: DataTypes.STRING,
             unique: true,
@@ -44,11 +48,15 @@ User.init(
     },
     // the second configuration object configures specified table options
     {
+        // also known as 'lifecycle events', 'hooks' are functions that are called either before or after Sequelize calls; in this case, it is necessary for the hook to run just before either a POST or PUT request
         hooks: {
+            // uses async/await function (in place of using a bulkier Promise function) due to the CPU-intensive nature of hashing
             async beforeCreate(newUserData) {
+                // bcrypt function takes the plaintext password and returns the hashed password, using the 'saltrounds' parameter, known as the 'cost-factor', to convey the number of rounds of hashing to be conducted by the bcrypt algorithm on the password before returning
                 newUserData.password = await bcrypt.hash(newUserData.password, 10);
                 return newUserData;
             },
+            // the Sequelize 'beforeUpdate()' method also requires a line of code added to associated PUT route
             async beforeUpdate(updatedUserData) {
                 updatedUserData.password = await bcrypt.hash(updatedUserData.password, 10);
                 return updatedUserData;
