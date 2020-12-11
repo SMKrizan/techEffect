@@ -1,0 +1,27 @@
+* {
+    box-sizing: border-box;
+  }
+  
+  body, html {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    font-family: sans-serif;
+    color: #333;
+  }
+
+  .post-list {
+    color: red;
+  }
+
+  .post {
+    color: red;
+  }
+
+  .title {
+    color: red;
+  }
+
+  .meta {
+    color: red;
+  }

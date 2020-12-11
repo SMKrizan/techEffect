@@ -29,11 +29,11 @@ const sess = {
 // this middleware needs to be placed before 'app.use(express(json())'
 app.use(session(sess));
 
-// const helpers = require('./utils/helpers');
-// const hbs = exphbs.create({ helpers });
+const helpers = require('./utils/helpers');
+const hbs = exphbs.create({ helpers });
 
-// app.engine('handlebars', hbs.engine);
-// app.set('view engine', 'handlebars');
+app.engine('handlebars', hbs.engine);
+app.set('view engine', 'handlebars');
 
 // EXPRESS.js MIDDLEWARE (processes called in between processing request and sending response)
 // 'express.json()' is required for POST and PUT requests (as GET & DELETE requests do not send data to server this middleware is not required for them); both methods,'express.json()' and 'express.urlencoded()', send data as data objects (enclosed in the body of the (POST or PUT) request) to server and ask server to accept or store that data object; both methods recognize/parse incoming request objects (containing key-value pairs).

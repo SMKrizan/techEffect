@@ -6,11 +6,11 @@ const bcrypt = require('bcrypt');
 // User extends all functionality of Model class
 class User extends Model {
     // the Sequelize 'checkPassword()' method takes plaintext from client request at 'req.body.email' and compares it with hashed password using bcrypt's 'compareSync()' method
-    checkPassword(loginPw) {
+    async checkPassword(loginPw) {
         // accesses saved user properties with keyword 'this'
-        return bcrypt.compareSync(loginPw, this.password);
-    }
-    
+        validate = await bcrypt.compareSync(loginPw, this.password);
+        return validate;
+    } 
 }
 
 // provides context for how the methods inherited from Model class should work, and initializes User model's data and configuration by passing in two objects as arguments
