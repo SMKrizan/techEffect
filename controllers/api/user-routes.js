@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { User, Post, Vote, Comment } = require('../../models');
+const { User, Post, Comment } = require('../../models');
 
 // the conventions utilized here wrt naming follows the REST architectural pattern (Representational State Transfer), creating what is known as a "ReSTful API" which (among others) applies the following guidelines: 1) use endpoint names that describe the data with which endpoints will be interfacing, 2) use HTTP methods like GET, POST etc... to describe action being performed by endpoint interface, and 3) use associated error codes, e.g. 400, 404, 500 etc.
 // GET /api/users
@@ -28,7 +28,7 @@ router.get('/:id', (req, res) => {
         include: [
             {
                 model: Post,
-                attributes: ['id', 'title', 'post_url', 'created_at']
+                attributes: ['id', 'title', 'content', 'created_at']
             },
             {
                 model: Comment,
@@ -37,12 +37,6 @@ router.get('/:id', (req, res) => {
                     model: Post,
                     attributes: ['title']
                 }
-            },
-            {
-                model: Post,
-                attributes: ['title'],
-                through: Vote,
-                as: 'voted_posts'
             }
         ]
     })
