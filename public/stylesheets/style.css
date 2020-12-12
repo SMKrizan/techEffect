@@ -11,11 +11,11 @@
   }
 
   .post-list {
-    color: red;
+    color: blue;
   }
 
   .post {
-    color: red;
+    color: black;
   }
 
   .title {
@@ -23,5 +23,5 @@
   }
 
   .meta {
-    color: red;
+    color: blue;
   }
