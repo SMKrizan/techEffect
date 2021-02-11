@@ -2,12 +2,7 @@ const { User } = require('../models');
 const bcrypt = require('bcrypt');
 
 const hashPwds = async (password) => {
-    try {
-        let pword = await bcrypt.hash(password, 10);
-    }
-    catch(err) {
-        console.log('err: ', err)
-    }
+    let pword = await bcrypt.hash(password, 10);
     console.log('pword: ', pword)
     console.log('type-pword: ', typeof pword)
     return pword

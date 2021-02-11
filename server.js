@@ -6,6 +6,7 @@ const session = require('express-session');
 // template engine:
 const exphbs = require('express-handlebars');
 
+// enables both HTTP and HTTPS requests to be made using the same code base
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -41,13 +42,13 @@ app.set('view engine', 'handlebars');
 app.use(express.json());
 // parses req-objects from server as string/array (when false) or any type (when true)
 app.use(express.urlencoded({ extended: true }));
-// takes all contents of a folder and delivers them as static assets; helpful for front-end-specific files like images/.css/.js.
+// takes all contents of a folder and delivers them as static assets; helpful for front-end-specific files like images/.css/.js. path.join is a helper to assist in building the correct path string regardless of OS (windows, mac, linux).
 app.use(express.static(path.join(__dirname, 'public')));
 
 // imports routes
 app.use(require('./controllers'));
 
 // establishes connection to db and server; 'sync' method directs Sequelize to take the models and connect them to associated db tables; if such a table does not exist Sequelize will create it; 'force: boolean' method establishes whether database tables will be dropped and recreated on startup
-sequelize.sync({ force: false }).then(() => {
-    app.listen(PORT, () => console.log('Now listening.'));
+sequelize.sync({ force: true }).then(() => {
+    app.listen(PORT, () => console.log(`Now listening on port ${PORT}.`));
 });
